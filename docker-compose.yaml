@@ -1,0 +1,28 @@
+# docker commpose is used to run multiple containers at once with a single command
+# docker-compose.yaml is the file that contains the configuration for the containers
+# whenever we run docker-compose up, it will create the containers as per the configuration in this file
+# and docker compose by default creates a network for the containers to communicate with each other
+
+# command to run: docker-compose up
+
+services:
+  mongodb:
+    image: "mongo"
+    container_name: "mongodb"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    image: "backend"
+    container_name: "node_backend"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "mongodb"
+    environment:
+      MONGO_URL: "mongo://mongodb:27017" # mongodb is the name of the service and should be used as the hostname instead of localhost
+
+volumes: 
+  mongodb_data: 
